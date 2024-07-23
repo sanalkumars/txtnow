@@ -4,6 +4,9 @@ import Victory from '@/assets/victory.svg';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from 'sonner';
+import { apiClient } from '@/lib/api-client';
+import { SIGNUP_ROUTE } from '@/utils/constants';
 
 
 
@@ -12,13 +15,36 @@ const AuthPage = () => {
     const [password, setPassword] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
 
+
+    // function for validation
+
+    const validateUser=()=>{
+        if(!email.length ){
+            toast.error("Email and password is required!!");
+            return false
+        }
+        if(!password.length ){
+            toast.error(" Password is required!!");
+            return false
+        }
+        if(password!==confirmPass){
+            toast.error(" Password and confirm Password does not match!!");
+            return false
+        }
+        return true;
+    }
+
+
     // function for handling login and signup
     const HandleLogin = async () => {
 
     }
 
     const HandleSignUp = async () => {
-
+        if (validateUser()) {
+           const response = await apiClient.post(SIGNUP_ROUTE,{email,password});
+           console.log({response});
+        }
     }
 
     return (
@@ -68,7 +94,7 @@ const AuthPage = () => {
                                     onChange={e => setPassword(e.target.value)}
                                 />
 
-                                <Button className="rounded-full p-6" onclick={HandleLogin}>
+                                <Button className="rounded-full p-6" onClick={HandleLogin}>
                                     Login
                                 </Button>
 
@@ -99,7 +125,7 @@ const AuthPage = () => {
                                     onChange={e => setConfirmPass(e.target.value)}
                                 />
 
-                                <Button className="rounded-full p-6" onclick={HandleSignUp}>
+                                <Button className="rounded-full p-6" onClick={HandleSignUp}>
                                     SignUp
                                 </Button>
 
