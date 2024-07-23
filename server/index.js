@@ -14,16 +14,24 @@ const mongoUrl = process.env.MONGO_URL;
 
 // cors middleware
 
-app.use(cors({
-    origin:[process.env.ORIGIN],
-    methods:["GET","POST","PATCH","PUT","DELETE"],
-    credentials:true,
-}));
+console.log('Allowed Origin:', process.env.ORIGIN);
+
+
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    optionsSuccessStatus: 200,
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(cookieParser());
 app.use(express.json());
 
 app.use('/api/auth',authRoutes);
+
+
+
  const server = app.listen(port,()=>{
     console.log(`server running at http://localhost:${port}`);
  });

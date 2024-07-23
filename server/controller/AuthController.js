@@ -2,40 +2,43 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
 
-const maxAge = 3*24*60*60*1000;
+const maxAge = 3 * 24 * 60 * 60 * 1000; // 3 days
 
-const createToken = async(email,userId)=>{
-    return jwt.sign({email,userId},
+const createToken = async (email, userId) => {
+    return jwt.sign(
+        { email, userId },
         process.env.JWT_SECRET,
-        { expriresIN:maxAge }
-    )
+        { expiresIn: maxAge / 1000 } // expiresIn expects the value in seconds
+    );
 };
 
-
-export  const signUp = async (req, res, next)=>{
+export const signUp = async (request, response, next) => {
+    console.log("inside signup function");
     try {
-        const { email, password } = req.body;
-        if(!email||!password){
-            return res.status(500).send("email and password is required")
+        const { email, password } = request.body;
+        console.log(request.body);
+
+        if (!email || !password) {
+            return response.status(500).send("email and password are required");
         }
 
         const user = await User.create({
             email, password
         });
-        res.cookie("jwt",createToken(user.email,user._id),{
+        response.cookie("jwt", await createToken(user.email, user._id), {
             maxAge,
-            secure:true,
-            sameSite:"None"
+            secure: true,
+            sameSite: "None"
         });
-        return res.status(201).json({
-            user:{
-                id:user._id,
-                email:user.email,
-                profileSetup:user.profileSetup,
+        return response.status(201).json({
+            user: {
+                id: user._id,
+                email: user.email,
+                profileSetup: user.profileSetup,
             }
-        })
+        });
     } catch (error) {
         console.log(error);
-        return res.status(500).send("Internal Server Error");
+        return response.status(500).send("Internal Server Error");
     }
 };
