@@ -13,10 +13,6 @@ const port= process.env.PORT || 3000;
 const mongoUrl = process.env.MONGO_URL;
 
 // cors middleware
-
-console.log('Allowed Origin:', process.env.ORIGIN);
-
-
 const corsOptions = {
     origin: 'http://localhost:5173',
     optionsSuccessStatus: 200,
