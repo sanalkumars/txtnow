@@ -5,14 +5,13 @@ import ChatPage from './pages/Chat'
 import ProfilePage from './pages/Profile'
 import { useAppStore } from './store';
 
+const {userInfo} =useAppStore();
 
 const AuthRoute = ({ children }) => {
-  const { userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;
   return isAuthenticated ? children : <Navigate to="/auth" />
 }
 const PrivateRoute = ({ children }) => {
-  const { userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;
   return isAuthenticated ? <Navigate to="/chat" /> : children;
 }
@@ -25,9 +24,11 @@ const App = () => {
             <AuthPage />
           </AuthRoute>
         } />
-        <Route path='/chat' element={<PrivateRoute>
+        <Route path='/chat' element={
+          <PrivateRoute>
           <ChatPage />
-        </PrivateRoute>} />
+        </PrivateRoute>
+      } />
         <Route path='/profile' element={<PrivateRoute> <ProfilePage /> </PrivateRoute>} />
         <Route path='*' element={<Navigate to={'/auth'} />} />
       </Routes>

@@ -1,16 +1,22 @@
 import { useAppStore } from '@/store'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const ChatPage = () => {
   const { userInfo } = useAppStore();
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(!userInfo.profileSetup){
+      toast("Please complete the profile to continue!");
+      navigate('/profile');
+    }
+  },[userInfo,navigate]);
+
   return (
-    <div>ChatPage
-      <div>
-        email:{userInfo.email}
-        email:{userInfo.id}
-        email:{userInfo.profileSetup}
-      </div>
-      <p>hai</p>
+    <div>
+     chatpage
     </div>
   )
 }
