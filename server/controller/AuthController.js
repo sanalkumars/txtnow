@@ -82,3 +82,66 @@ export const Login = async(req, res, next)=>{
         
     }
 }
+
+export const signin = async (req, res, next) => {
+    const { email, password } = req.body;
+    const jwtSecret = process.env.JWT_SECRET;
+
+    if (!email || !password || email === "" || password === "") {
+        return next(errorHandler(400, "All fields are required!!!"));
+    }
+
+    try {
+        const validUser = await User.findOne({ email });
+
+        if (!validUser) {
+            return next(errorHandler(404, "User not found!!!"));
+        }
+
+        const validPassword = bcryptjs.compareSync(password, validUser.password);
+
+        if (!validPassword) {
+            return next(errorHandler(404, "Wrong Credentials!!!"));
+        }
+
+        const token = jwt.sign(
+            { id: validUser._id, email: validUser.email }, 
+            jwtSecret,
+            
+        );
+
+        const { password: pass, ...rest } = validUser.toObject();
+
+        res.status(200)
+            .cookie('access_token', token, { httpOnly: true ,maxAge: 24 * 60 * 60 * 1000, })
+            .json({ ...rest, token });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+
+
+export const getUserInfo = async(request , response , next )=>{
+    try {
+        
+
+        // return res.status(200).json({
+        //     user: {
+        //         id: user._id,
+        //         email: user.email,
+        //         profileSetup: user.profileSetup,
+        //         firstName:user.firstName,
+        //         lastName:user.lastName,
+        //         image:user.image,
+        //         color:user.color,
+        //     }
+        // });
+
+    } catch (error) {
+        
+    }
+
+}

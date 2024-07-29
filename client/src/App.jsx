@@ -5,13 +5,15 @@ import ChatPage from './pages/Chat'
 import ProfilePage from './pages/Profile'
 import { useAppStore } from './store';
 
-const {userInfo} =useAppStore();
+
 
 const AuthRoute = ({ children }) => {
+  const {userInfo} =useAppStore();
   const isAuthenticated = !!userInfo;
   return isAuthenticated ? children : <Navigate to="/auth" />
 }
 const PrivateRoute = ({ children }) => {
+  const {userInfo} =useAppStore();
   const isAuthenticated = !!userInfo;
   return isAuthenticated ? <Navigate to="/chat" /> : children;
 }
