@@ -7,31 +7,31 @@ import { useAppStore } from './store';
 
 
 
-const AuthRoute = ({ children }) => {
-  const {userInfo} =useAppStore();
-  const isAuthenticated = !!userInfo;
-  return isAuthenticated ? children : <Navigate to="/auth" />
-}
-const PrivateRoute = ({ children }) => {
-  const {userInfo} =useAppStore();
-  const isAuthenticated = !!userInfo;
-  return isAuthenticated ? <Navigate to="/chat" /> : children;
-}
+// const AuthRoute = ({ children }) => {
+//   const {userInfo} =useAppStore();
+//   const isAuthenticated = !!userInfo;
+//   return isAuthenticated ? children : <Navigate to="/auth" />
+// }
+// const PrivateRoute = ({ children }) => {
+//   const {userInfo} =useAppStore();
+//   const isAuthenticated = !!userInfo;
+//   return isAuthenticated ? <Navigate to="/chat" /> : children;
+// }
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/auth' element={
-          <AuthRoute>
+          
             <AuthPage />
-          </AuthRoute>
+         
         } />
         <Route path='/chat' element={
-          <PrivateRoute>
+          
           <ChatPage />
-        </PrivateRoute>
+        
       } />
-        <Route path='/profile' element={<PrivateRoute> <ProfilePage /> </PrivateRoute>} />
+        <Route path='/profile' element={ <ProfilePage /> } />
         <Route path='*' element={<Navigate to={'/auth'} />} />
       </Routes>
     </BrowserRouter>
